@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 13:05:04 by tfiette           #+#    #+#             */
-/*   Updated: 2025/07/30 19:16:59 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/08 13:07:46 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	_state_machine(t_philo *philo, suseconds_t time)
 
 void	switch_state(t_philo *philo, int new_state, suseconds_t time)
 {
-	time = get_time(&philo->time, philo->start_time);
 	philo->state = new_state;
 	if (new_state == STOP)
 		return ;
@@ -54,34 +53,6 @@ void	switch_state(t_philo *philo, int new_state, suseconds_t time)
 	}
 }
 
-// void	state_print(suseconds_t time, t_philo *philo)
-// {
-// 	pthread_mutex_lock(philo->ready_mutex);
-// 	time = get_time(&philo->time, philo->start_time);
-// 	if (*philo->ready == FALSE)
-// 		philo->state = STOP;
-// 	else if (philo->state == DYING)
-// 	{
-// 		printf("%s%ld %d died\n", philo->color, time, philo->id);
-// 		*philo->ready = FALSE;
-// 	}
-// 	if (philo->state == TAKING)
-// 		printf("%s%ld %d has taken a fork\n", philo->color, time, philo->id);
-// 	else if (philo->state == EATING)
-// 	{
-// 		printf("%ld %d is eating", time, philo->id);
-// 		if (philo->show)
-// 			printf(" meal number [%d / %d]", philo->meal_done + 1,
-// 				philo->meal_nbr);
-// 		printf("\n");
-// 	}
-// 	else if (philo->state == SLEEPING)
-// 		printf("%s%ld %d is sleeping\n", philo->color, time, philo->id);
-// 	else if (philo->state == THINKING)
-// 		printf("%s%ld %d is thinking\n", philo->color, time, philo->id);
-// 	pthread_mutex_unlock(philo->ready_mutex);
-// }
-
 void	state_print(suseconds_t time, t_philo *philo)
 {
 	pthread_mutex_lock(philo->ready_mutex);
@@ -90,19 +61,48 @@ void	state_print(suseconds_t time, t_philo *philo)
 		philo->state = STOP;
 	else if (philo->state == DYING)
 	{
-		printf("%ld %d died\n", time, philo->id);
+		printf("%s%ld %d died\n", philo->color, time, philo->id);
 		*philo->ready = FALSE;
 	}
 	if (philo->state == TAKING)
-		printf("%ld %d has taken a fork\n", time, philo->id);
+		printf("%s%ld %d has taken a fork\n", philo->color, time, philo->id);
 	else if (philo->state == EATING)
-		printf("%s%ld %d is eating\n", philo->color, time, philo->id);
+	{
+		printf("%s%ld %d is eating", philo->color, time, philo->id);
+		if (philo->show)
+			printf(" meal number [%d / %d]", philo->meal_done + 1,
+				philo->meal_nbr);
+		printf("\n");
+	}
 	else if (philo->state == SLEEPING)
-		printf("%ld %d is sleeping\n", time, philo->id);
+		printf("%s%ld %d is sleeping\n", philo->color, time, philo->id);
 	else if (philo->state == THINKING)
-		printf("%ld %d is thinking\n", time, philo->id);
+		printf("%s%ld %d is thinking\n", philo->color, time, philo->id);
+	printf("\e[0m");
 	pthread_mutex_unlock(philo->ready_mutex);
 }
+
+// void	state_print(suseconds_t time, t_philo *philo)
+// {
+// 	pthread_mutex_lock(philo->ready_mutex);
+// 	time = get_time(&philo->time, philo->start_time);
+// 	if (*philo->ready == FALSE)
+// 		philo->state = STOP;
+// 	else if (philo->state == DYING)
+// 	{
+// 		printf("%ld %d died\n", time, philo->id);
+// 		*philo->ready = FALSE;
+// 	}
+// 	if (philo->state == TAKING)
+// 		printf("%ld %d has taken a fork\n", time, philo->id);
+// 	else if (philo->state == EATING)
+// 		printf("%s%ld %d is eating\n", philo->color, time, philo->id);
+// 	else if (philo->state == SLEEPING)
+// 		printf("%ld %d is sleeping\n", time, philo->id);
+// 	else if (philo->state == THINKING)
+// 		printf("%ld %d is thinking\n", time, philo->id);
+// 	pthread_mutex_unlock(philo->ready_mutex);
+// }
 
 void	_state_init(t_philo *philo, suseconds_t time)
 {
