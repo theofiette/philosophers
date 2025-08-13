@@ -6,44 +6,11 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 13:24:11 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/11 16:31:57 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/13 16:28:58 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers_bonus.h"
-
-static int	is_digits(char *str)
-{
-	while (*str)
-	{
-		if (*str < '0' || *str > '9')
-			return (FALSE);
-		str ++;
-	}
-	return (TRUE);
-}
-
-static int	is_pos_int(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] == '+' || str[i] == ' ')
-		str ++;
-	while (str[i] == '0')
-		str ++;
-	if (!str[i])
-		return (FALSE);
-	while (str[i])
-		i ++;
-	if (i < 10)
-		return (TRUE);
-	if (i > 10)
-		return (FALSE);
-	if (ft_strcmp(str, "2147483647") > 0)
-		return (FALSE);
-	return (TRUE);
-}
 
 /*
 *	iterate through argv to make sure all args are digits and between 0 to INT_MAX

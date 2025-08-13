@@ -6,25 +6,27 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 13:17:39 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/11 18:51:05 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/13 16:37:01 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_BONUS_H
 # define PHILOSOPHERS_BONUS_H
 
+// valgrind --tool=drd --trace-semaphore=yes ./philo_bonus 4 310 200 100
+
 //// -headers
 
-#include <semaphore.h>
-#include <pthread.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/time.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <semaphore.h>
+# include <pthread.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 //// -macros
 
@@ -52,12 +54,12 @@ enum	e_state
 
 typedef struct s_args
 {
-	int philo_nbr;
-	int time_to_die;
-	int time_to_eat;
-	int time_to_sleep;
-	int meal_nbr;
-	int show;
+	int	philo_nbr;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	meal_nbr;
+	int	show;
 }	t_args;
 
 typedef struct s_init
@@ -67,7 +69,6 @@ typedef struct s_init
 	sem_t	*sem_forks;
 	sem_t	*sem_print;
 }	t_init;
-
 
 typedef struct s_philo
 {
@@ -107,19 +108,31 @@ void		fill_philo(t_args *args, t_init *init, t_philo *philo);
 void		check_values(char **argv);
 void		check_usage(int argc, char **argv);
 void		fill_args(t_args *args, int argc, char **argv);
+//process_bonus.c
+void		_end_check(t_philo *philo, suseconds_t time);
+void		child_process(t_init *init, t_philo *philo, int philo_id);
+void		fork_management(t_args *args, t_init *init, t_philo *philo);
+void		kill_all_children(t_init *init);
+void		wait_for_children(t_args *args, t_init *init);
+
 //state_bonus.c
 void		_state_machine(t_philo *philo, suseconds_t time);
 void		state_print(suseconds_t time, t_philo *philo);
 void		switch_state(t_philo *philo, int new_state, suseconds_t time);
+void		_state_taking(t_philo *philo, suseconds_t time);
+void		_state_eating(t_philo *philo, suseconds_t time);
+void		_state_sleeping(t_philo *philo, suseconds_t time);
+void		_state_thinking(t_philo *philo, suseconds_t time);
+
 //time_bonus.c
 void		synchronize(t_init *init, t_philo *philo);
 suseconds_t	get_time(struct timeval *time, suseconds_t start_time);
 void		set_time(struct timeval *time, suseconds_t *start_time);
-
 //utils_bonus.c
 int			ft_atoi(char *n);
 int			ft_strlen(char *str);
 int			ft_strcmp(char *str1, char *str2);
 char		*ft_get_program_name(char *program);
-
+int			is_digits(char *str);
+int			is_pos_int(char *str);
 #endif

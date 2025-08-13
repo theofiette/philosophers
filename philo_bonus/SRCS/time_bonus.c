@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 19:06:36 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/13 13:07:17 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/13 16:17:47 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	synchronize(t_init *init, t_philo *philo)
 {
-	suseconds_t time;
+	suseconds_t	time;
 
 	sem_wait(init->sem_ready);
 	sem_post(init->sem_ready);

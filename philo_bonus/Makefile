@@ -1,6 +1,6 @@
 NAME=philo_bonus
-CC=gcc
-CFLAGS=-Wall -Wextra -Werror -g -MMD
+CC=cc
+CFLAGS=-Wall -Wextra -Werror -MMD
 INCLUDES=-I INCLUDES
 D_BUILD=.build/
 HEADERS=philosophers_bonus.h \
@@ -10,7 +10,9 @@ SRC=	SRCS/main_bonus.c \
 		SRCS/exit_bonus.c \
 		SRCS/init_bonus.c \
 		SRCS/parsing_bonus.c \
+		SRCS/process_bonus.c \
 		SRCS/state_bonus.c \
+		SRCS/state_bis_bonus.c \
 		SRCS/time_bonus.c \
 		$(UTILS)
 
@@ -22,7 +24,8 @@ SRC=	SRCS/main_bonus.c \
 # 		SRCS/tab_bis.c \
 # 		SRCS/thread.c \
 		
-UTILS=	UTILS/utils_bonus.c
+UTILS=	UTILS/utils_bonus.c \
+		UTILS/utils_bis_bonus.c
 
 OBJS=	$(addprefix $(D_BUILD), $(SRC:.c=.o))
 

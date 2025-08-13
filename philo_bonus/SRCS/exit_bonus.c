@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 19:20:04 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/13 12:55:34 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/13 16:10:47 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,14 @@
 
 static void	print_error(char *err_str)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(err_str);
 	write(2, err_str, len);
 }
 
-void	clean_init(t_init *init)
+static void	clean_semaphore(t_init *init)
 {
-	int i;
-
-	i = 0;
-	if (init->pid_tab)
-	{
-		while (init->pid_tab[i])
-		{
-			if (!waitpid(init->pid_tab[i], NULL, WNOHANG))
-			{
-				kill(init->pid_tab[i], SIGTERM);
-				printf("X");
-			}
-			i ++;
-		}
-		free(init->pid_tab);
-	}
 	if (init->sem_ready && init->sem_ready != SEM_FAILED)
 	{
 		sem_close(init->sem_ready);
@@ -55,33 +39,30 @@ void	clean_init(t_init *init)
 	}
 }
 
+void	clean_init(t_init *init)
+{
+	int	i;
 
-// void	child_process_clean_init(t_init *init)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	if (init->pid_tab)
-// 	{
-// 		free(init->pid_tab);
-// 	}
-// 	if (init->sem_ready && init->sem_ready != SEM_FAILED)
-// 	{
-// 		sem_unlink(SEM_READY);
-// 	}
-// 	if (init->sem_forks && init->sem_forks != SEM_FAILED)
-// 	{
-// 		sem_unlink(SEM_FORKS);
-// 	}
-// 	if (init->sem_print && init->sem_print != SEM_FAILED)
-// 	{
-// 		sem_unlink(SEM_PRINT);
-// 	}
-// }
+	i = 0;
+	if (init->pid_tab)
+	{
+		while (init->pid_tab[i])
+		{
+			if (!waitpid(init->pid_tab[i], NULL, WNOHANG))
+			{
+				kill(init->pid_tab[i], SIGTERM);
+				printf("X");
+			}
+			i ++;
+		}
+		free(init->pid_tab);
+	}
+	clean_semaphore(init);
+}
 
 void	child_clean_init(t_init *init)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (init->pid_tab)
