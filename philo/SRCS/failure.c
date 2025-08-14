@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:15:00 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/08 12:47:18 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 12:50:49 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,8 @@ void	print_error(char *err_str)
 	write(2, err_str, len);
 }
 
-void	failure_exit(char *err_str, int err_status, t_tabs tabs)
+void	failure_exit(char *err_str, t_tabs tabs)
 {
 	print_error(err_str);
 	clean_mallocs(tabs);
-	exit(err_status);
 }

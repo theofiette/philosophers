@@ -6,42 +6,55 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 15:37:40 by tfiette           #+#    #+#             */
-/*   Updated: 2025/07/30 19:34:26 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 14:20:46 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	parse(t_args *args, int argc, char **argv)
+/*
+*	check the argument, if valid fill a stack struct.
+*/
+static int	parse(t_args *args, int argc, char **argv)
 {
-	check_usage(argc, argv);
-	check_values(argv);
+	if (check_usage(argc, argv) || check_values(argv))
+		return (TRUE);
 	fill_args(args, argc, argv);
+	return (FALSE);
 }
 
-static void	init(t_args *args, t_tabs *tabs, int *ready,
+/*
+* init the data (allocate and fill)
+* check all functions that can fail
+*/
+static int	init(t_args *args, t_tabs *tabs, int *ready,
 	pthread_mutex_t *ready_mutex)
 {
 	init_tabs(tabs);
-	malloc_thread_tab(args, tabs);
-	malloc_philo_tab(args, tabs);
-	malloc_fork_tab(args, tabs);
-	malloc_fork_state_tab(args, tabs);
-	pthread_mutex_init(ready_mutex, NULL);
-	fill_fork_tab(*args, *tabs);
+	if (malloc_thread_tab(args, tabs)
+		|| malloc_philo_tab(args, tabs)
+		|| malloc_fork_tab(args, tabs)
+		|| malloc_fork_state_tab(args, tabs)
+		|| pthread_mutex_init(ready_mutex, NULL)
+		|| fill_fork_tab(*args, *tabs))
+		return (TRUE);
 	fill_fork_state_tab(*args, *tabs);
 	fill_philo_tab(*args, *tabs, ready, ready_mutex);
+	return (FALSE);
 }
 
-static void	mutex_management(t_args *args, t_tabs *tabs, int *ready,
+static int	mutex_management(t_args *args, t_tabs *tabs, int *ready,
 	pthread_mutex_t *ready_mutex)
 {
 	pthread_mutex_lock(ready_mutex);
-	init_threads(args, tabs);
+	if (init_threads(args, tabs))
+		return (TRUE);
 	*ready = TRUE;
 	pthread_mutex_unlock(ready_mutex);
-	join_threads(args, *tabs);
+	if (join_threads(args, *tabs))
+		return (TRUE);
 	pthread_mutex_destroy(ready_mutex);
+	return (FALSE);
 }
 
 static void	clean(t_args args, t_tabs tabs)
@@ -58,12 +71,12 @@ int	main(int argc, char **argv)
 	pthread_mutex_t	ready_mutex;
 
 	ready = FALSE;
-	parse(&args, argc, argv);
-	init(&args, &tabs, &ready, &ready_mutex);
-	mutex_management(&args, &tabs, &ready, &ready_mutex);
+	if (parse(&args, argc, argv))
+		return (0);
+	if (init(&args, &tabs, &ready, &ready_mutex))
+		return (1);
+	if (mutex_management(&args, &tabs, &ready, &ready_mutex))
+		return (2);
 	clean(args, tabs);
 	return (0);
 }
-
-/*TODO : CLEAN EXIT IN THREAD*/
-/*TODO : CLEAN EXIT IF INIT MUTEX FAIL*/

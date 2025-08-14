@@ -6,13 +6,13 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:20:59 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/08 12:46:43 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 12:51:39 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	fill_fork_tab(t_args args, t_tabs tabs)
+int	fill_fork_tab(t_args args, t_tabs tabs)
 {
 	int	i;
 
@@ -22,10 +22,12 @@ void	fill_fork_tab(t_args args, t_tabs tabs)
 		if (pthread_mutex_init(&tabs.fork_tab[i], NULL))
 		{
 			clean_n_mutexes(i, tabs);
-			failure_exit("Failed to init forks mutexes", 1, tabs);
+			failure_exit("Failed to init forks mutexes", tabs);
+			return (TRUE);
 		}
 		i ++;
 	}
+	return (FALSE);
 }
 
 void	fill_fork_state_tab(t_args args, t_tabs tabs)

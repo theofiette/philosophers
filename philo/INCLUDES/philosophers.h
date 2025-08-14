@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 12:06:54 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/08 10:50:36 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 12:54:04 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,18 +97,16 @@ typedef struct s_tabs
 
 //// -prototypes
 
-//debug.c
-void		debug_print_args(t_args *args);
 //color.c
 void		get_color(int color, t_philo *philo);
 //failure.c 
 void		clean_mutexes(t_args args, t_tabs tabs);
 void		clean_n_mutexes(int n, t_tabs tabs);
 void		clean_mallocs(t_tabs tabs);
-void		failure_exit(char *err_str, int err_status, t_tabs tabs);
+void		failure_exit(char *err_str, t_tabs tabs);
 //parsing.c
-void		check_values(char **argv);
-void		check_usage(int argc, char **argv);
+int			check_values(char **argv);
+int			check_usage(int argc, char **argv);
 void		fill_args(t_args *args, int argc, char **argv);
 //routine.c
 void		*routine(void *arg);
@@ -124,17 +122,17 @@ void		_state_sleeping(t_philo *philo, suseconds_t time);
 void		_state_thinking(t_philo *philo, suseconds_t time);
 //tab.c
 void		init_tabs(t_tabs *tabs);
-void		malloc_fork_tab(t_args *args, t_tabs *tabs);
-void		malloc_philo_tab(t_args *args, t_tabs *tabs);
-void		malloc_thread_tab(t_args *args, t_tabs *tabs);
-void		malloc_fork_state_tab(t_args *args, t_tabs *tabs);
-void		fill_fork_tab(t_args args, t_tabs tabs);
+int			malloc_fork_tab(t_args *args, t_tabs *tabs);
+int			malloc_philo_tab(t_args *args, t_tabs *tabs);
+int			malloc_thread_tab(t_args *args, t_tabs *tabs);
+int			malloc_fork_state_tab(t_args *args, t_tabs *tabs);
+int			fill_fork_tab(t_args args, t_tabs tabs);
 void		fill_fork_state_tab(t_args args, t_tabs tabs);
 void		fill_philo_tab(t_args args, t_tabs tabs, int *init,
 				pthread_mutex_t *mutex_ready);
 //thread.c
-void		init_threads(t_args *args, t_tabs *tabs);
-void		join_threads(t_args *args, t_tabs tabs);
+int			init_threads(t_args *args, t_tabs *tabs);
+int			join_threads(t_args *args, t_tabs tabs);
 //time.c
 void		synchronize(t_philo *philo);
 suseconds_t	get_time(struct timeval *time, suseconds_t start_time);

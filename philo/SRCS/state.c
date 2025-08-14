@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 13:05:04 by tfiette           #+#    #+#             */
-/*   Updated: 2025/08/11 15:37:53 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 14:19:51 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	switch_state(t_philo *philo, int new_state, suseconds_t time)
 	state_print(time, philo);
 	if (new_state == EATING)
 	{
-		philo->_eat = time;
+		philo->time_last_eat = time;
 		philo->time_start_eat = time;
 	}
 	if (new_state == SLEEPING)

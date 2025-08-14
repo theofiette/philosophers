@@ -6,7 +6,7 @@
 /*   By: tfiette <tfiette@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 17:17:32 by tfiette           #+#    #+#             */
-/*   Updated: 2025/07/30 18:42:29 by tfiette          ###   ########.fr       */
+/*   Updated: 2025/08/14 14:11:14 by tfiette          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void	_end_check(t_philo *philo, suseconds_t time)
 {
-	(void)time;
 	if (philo->state == STOP)
 		return ;
 	if (time - philo->time_last_eat > philo->time_to_die)
@@ -45,14 +44,15 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	synchronize(philo);
 	set_time(&(philo->time), &(philo->start_time));
-	if (philo->id % 2)
-		usleep(999);
+	if (!(philo->id % 2))
+		usleep(philo->time_to_eat * 1000);
 	while (philo->state != DYING && philo->state != STOP)
 	{
 		time = get_time(&(philo->time), philo->start_time);
 		_state_machine(philo, time);
 		time = get_time(&(philo->time), philo->start_time);
 		_end_check(philo, time);
+		usleep(100);
 	}
 	unlock_forks(philo);
 	return (arg);
